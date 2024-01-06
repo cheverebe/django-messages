@@ -1,10 +1,13 @@
 import re
 import django
 from django.utils.text import wrap
-from django.utils.translation import ugettext, ugettext_lazy as _
 from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.conf import settings
+try:
+    from django.utils.translation import ugettext, ugettext_lazy as _
+except:
+    from django.utils.translation import gettext, gettext_lazy as _
 
 # favour django-mailer but fall back to django.core.mail
 
@@ -23,7 +26,7 @@ def format_quote(sender, body):
     for i, line in enumerate(lines):
         lines[i] = "> %s" % line
     quote = '\n'.join(lines)
-    return ugettext(u"%(sender)s wrote:\n%(body)s") % {
+    return gettext(u"%(sender)s wrote:\n%(body)s") % {
         'sender': sender,
         'body': quote
     }
@@ -51,7 +54,7 @@ def format_subject(subject):
             # if anything fails here, fall back to the old mechanism
             pass
 
-    return ugettext(u"Re%(prefix)s: %(subject)s") % {
+    return gettext(u"Re%(prefix)s: %(subject)s") % {
         'subject': subject,
         'prefix': prefix
     }
